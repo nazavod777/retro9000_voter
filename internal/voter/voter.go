@@ -112,7 +112,8 @@ func DoVotes(
 	availableVotes := eligibleVotes - usedVotes
 
 	if availableVotes <= 0 {
-		return fmt.Errorf("%s | No Available Votes", accountData.AccountAddress.String())
+		log.Printf("%s | No Available Votes", accountData.AccountAddress.String())
+		return nil
 	}
 
 	log.Printf("%s | Eligible Votes: %d | Already Used Votes: %d | Available Votes: %d",
