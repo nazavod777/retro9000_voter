@@ -312,8 +312,6 @@ func getBollotsRequest(
 			continue
 		}
 
-		log.Printf("%s", string(resp.Body()))
-
 		responseData := &GetBallotsResponse{}
 
 		if err = json.Unmarshal(resp.Body(), &responseData); err != nil {
