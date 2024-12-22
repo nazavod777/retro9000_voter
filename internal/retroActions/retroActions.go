@@ -387,6 +387,10 @@ func GetVotes(
 			continue
 		}
 
+		if responseData.StatusCode == 404 && responseData.Message == "Ballot not found!" {
+			return responseData
+		}
+
 		if responseData == nil || responseData.StatusCode != 200 {
 			log.Printf("%s | Wrong Response When Parsing Votes: %s, response: %s",
 				accountData.AccountAddress.String(), string(resp.Body()), string(resp.Body()))
