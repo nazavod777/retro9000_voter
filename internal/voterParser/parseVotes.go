@@ -37,6 +37,10 @@ func ParseVotes(
 
 	votesData := retroActions.GetVotes(client, accountData, accessToken, refreshToken)
 
+	if votesData == nil {
+		return fmt.Errorf("%s | No Available Votes", accountData.AccountAddress.String())
+	}
+
 	eligibleVotes := votesData.Data.TotalEligibleVotes
 	usedVotes := votesData.Data.UsedVotes
 	availableVotes := eligibleVotes - usedVotes
