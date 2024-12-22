@@ -88,17 +88,12 @@ func handlePanic() {
 	if r := recover(); r != nil {
 		log.Printf("Unexpected Error: %v", r)
 		fmt.Println("Press Enter to Exit..")
-		_, err := fmt.Scanln()
-		if err != nil {
-			os.Exit(1)
-		}
+		_, _ = fmt.Scanln()
 		os.Exit(1)
 	}
 }
 
 func main() {
-	defer handlePanic()
-
 	// init log
 	var inputData string
 	initLog()
@@ -115,8 +110,11 @@ func main() {
 			log.Panicf("Error When Closing Log File: %v", err)
 		}
 	}(wr)
+
 	mw := io.MultiWriter(os.Stdout, wr)
 	log.SetOutput(mw)
+
+	defer handlePanic()
 
 	// init proxies
 	err = util.InitProxies(filepath.Join("config", "proxies.txt"))
