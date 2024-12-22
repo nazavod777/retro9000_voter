@@ -104,7 +104,8 @@ func DoVotes(
 	votesData := retroActions.GetVotes(client, accountData, accessToken, refreshToken)
 
 	if votesData == nil {
-		return fmt.Errorf("%s | No Available Votes", accountData.AccountAddress.String())
+		log.Printf("%s | No Available Votes", accountData.AccountAddress.String())
+		return nil
 	}
 
 	eligibleVotes := votesData.Data.TotalEligibleVotes
