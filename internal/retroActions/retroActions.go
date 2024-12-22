@@ -245,7 +245,7 @@ func DoVote(
 
 		err = client.Do(req, resp)
 		if err != nil {
-			log.Printf("%s | Error When Voting %s",
+			log.Printf("%s | Error When Voting: %s",
 				accountData.AccountAddress.String(), err)
 
 			fasthttp.ReleaseRequest(req)
