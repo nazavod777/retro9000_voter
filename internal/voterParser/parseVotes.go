@@ -45,6 +45,11 @@ func ParseVotes(
 	usedVotes := votesData.Data.UsedVotes
 	availableVotes := eligibleVotes - usedVotes
 
+	if availableVotes <= 0 {
+		log.Printf("%s | No Available Votes", accountData.AccountAddress.String())
+		return nil
+	}
+
 	log.Printf("%s | Eligible Votes: %d | Already Used Votes: %d | Available Votes: %d",
 		accountData.AccountAddress.String(), eligibleVotes, usedVotes, availableVotes)
 
