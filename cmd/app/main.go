@@ -14,6 +14,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"sync"
 )
 
@@ -79,9 +80,7 @@ func inputUser(prompt string) string {
 		fmt.Println("Error reading input:", err)
 		return ""
 	}
-
-	input = input[:len(input)-1]
-
+	input = strings.TrimSpace(input)
 	return input
 }
 
