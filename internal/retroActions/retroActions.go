@@ -280,12 +280,75 @@ func DoVote(
 	}
 }
 
+func getBollotsRequest(
+	client *fasthttp.Client,
+	accountData types.AccountData,
+	accessToken string,
+	refreshToken string,
+) {
+	url := fmt.Sprintf("https://api-retro-9000.avax.network/api/vote/rounds/%s/ballot",
+		global.Const.RoundID)
+
+	for {
+		req := fasthttp.AcquireRequest()
+		req.SetRequestURI(url)
+		req.Header.SetMethod("GET")
+		req.Header.Set("accept", "application/json, text/plain, */*")
+		req.Header.Set("accept-language", "ru,en;q=0.9")
+		req.Header.Set("origin", "https://retro9000.avax.network")
+		req.Header.Set("referer", "https://retro9000.avax.network/")
+		req.Header.SetCookie("accessToken", accessToken)
+		req.Header.SetCookie("refreshToken", refreshToken)
+
+		resp := fasthttp.AcquireResponse()
+
+		err := client.Do(req, resp)
+		if err != nil {
+			log.Printf("%s | Error When Sending Ballot Request %s",
+				accountData.AccountAddress.String(), err)
+
+			fasthttp.ReleaseRequest(req)
+			fasthttp.ReleaseResponse(resp)
+			continue
+		}
+
+		log.Printf("%s", string(resp.Body()))
+
+		responseData := &GetBallotsResponse{}
+
+		if err = json.Unmarshal(resp.Body(), &responseData); err != nil {
+			log.Printf("%s | Failed To Parse JSON Response When Sending Ballot Request: %s, response: %s",
+				accountData.AccountAddress.String(), err, string(resp.Body()))
+
+			fasthttp.ReleaseRequest(req)
+			fasthttp.ReleaseResponse(resp)
+			continue
+		}
+
+		if responseData == nil || responseData.StatusCode != 200 {
+			log.Printf("%s | Wrong Response When Sending Ballot Request: %s, response: %s",
+				accountData.AccountAddress.String(), string(resp.Body()), string(resp.Body()))
+
+			fasthttp.ReleaseRequest(req)
+			fasthttp.ReleaseResponse(resp)
+			continue
+		}
+
+		fasthttp.ReleaseRequest(req)
+		fasthttp.ReleaseResponse(resp)
+
+		return
+	}
+}
+
 func GetVotes(
 	client *fasthttp.Client,
 	accountData types.AccountData,
 	accessToken string,
 	refreshToken string,
 ) *GetVotesResponse {
+	getBollotsRequest(client, accountData, accessToken, refreshToken)
+
 	url := fmt.Sprintf("https://api-retro-9000.avax.network/api/vote/rounds/%s/ballot-votes",
 		global.Const.RoundID)
 
