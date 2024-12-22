@@ -103,12 +103,20 @@ func DoVotes(
 
 	votesData := retroActions.GetVotes(client, accountData, accessToken, refreshToken)
 
+	if votesData == nil {
+		return fmt.Errorf("%s | No Available Votes", accountData.AccountAddress.String())
+	}
+
 	eligibleVotes := votesData.Data.TotalEligibleVotes
 	usedVotes := votesData.Data.UsedVotes
 	availableVotes := eligibleVotes - usedVotes
 
 	log.Printf("%s | Eligible Votes: %d | Already Used Votes: %d | Available Votes: %d",
 		accountData.AccountAddress.String(), eligibleVotes, usedVotes, availableVotes)
+
+	if availableVotes <= 0 {
+		return fmt.Errorf("%s | No Available Votes", accountData.AccountAddress.String())
+	}
 
 	projectsList := retroActions.GetProjectsList(client, accountData, accessToken, refreshToken)
 	distribution := generateDistribution(projectsList, availableVotes)
