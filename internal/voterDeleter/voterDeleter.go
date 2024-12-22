@@ -37,6 +37,10 @@ func DeleteVotes(
 
 	votesData := retroActions.GetVotes(client, accountData, accessToken, refreshToken)
 
+	if votesData == nil {
+		return fmt.Errorf("%s | No Available Votes", accountData.AccountAddress.String())
+	}
+
 	for i, currentVote := range votesData.Data.Votes {
 		err = retroActions.DeleteVote(client, accountData, accessToken, refreshToken, currentVote.Project.Id)
 
