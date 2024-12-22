@@ -51,6 +51,18 @@ type GetVotesResponse struct {
 	Error    interface{} `json:"error"`
 }
 
+type GetBallotsResponse struct {
+	StatusCode int    `json:"statusCode"`
+	Message    string `json:"message"`
+	Data       struct {
+		Id                 string `json:"id"`
+		TotalEligibleVotes int64  `json:"total_eligible_votes"`
+		UsedVotes          int64  `json:"used_votes"`
+	} `json:"data"`
+	Metadata interface{} `json:"metadata"`
+	Error    interface{} `json:"error"`
+}
+
 type getProjectsListResponse struct {
 	StatusCode int           `json:"statusCode"`
 	Message    string        `json:"message"`
