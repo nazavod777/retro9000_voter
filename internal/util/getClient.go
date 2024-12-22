@@ -63,9 +63,9 @@ func GetClient(proxy string) *fasthttp.Client {
 		MaxIdleConnDuration:           90 * time.Second,
 		DisableHeaderNamesNormalizing: true,
 		DisablePathNormalizing:        true,
-		ReadTimeout:                   30 * time.Second,
-		WriteTimeout:                  30 * time.Second,
-		MaxConnWaitTimeout:            30 * time.Second,
+		ReadTimeout:                   90 * time.Second,
+		WriteTimeout:                  90 * time.Second,
+		MaxConnWaitTimeout:            90 * time.Second,
 		StreamResponseBody:            true,
 		TLSConfig:                     tlsConfig,
 	}
